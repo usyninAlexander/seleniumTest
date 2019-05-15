@@ -5,7 +5,7 @@ class CheckedElementBool implements CheckedElement {
     private String value;
     private boolean status = false;
 
-    public CheckedElementBool(String value) {
+    CheckedElementBool(String value) {
         this.value = value;
     }
     public CheckedElementBool(String value, boolean status) {
