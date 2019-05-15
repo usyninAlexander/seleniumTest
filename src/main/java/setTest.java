@@ -107,8 +107,41 @@ public class setTest {
             if( URLDecoder.decode(url, "UTF-8").equalsIgnoreCase("http://aplana.ru/search?q=Вакансии")) {
                 System.out.println("Page URL Ok");
             } else System.out.println("Page URL ERROR:" + driver.getCurrentUrl());
-            //Переходим на главную страницу
 
+            //Переходим на главную страницу
+            new Actions(driver).click(currentPage.findElement(By.className("header-brand"))).perform();
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.className("header-brand")));
+            link = driver.findElement(By.xpath(".//li[contains(@class, 'nav-contacts')]/a"));
+
+            new Actions(driver).click(link).perform();
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("h1")));
+            //Находим элементы с нужными полями
+            WebElement name = ((ChromeDriver) driver).findElementByName("feedback[name]");
+            WebElement email = ((ChromeDriver) driver).findElementByName("feedback[email]");
+            WebElement commitButton = driver.findElement(By.xpath(".//div[contains(@class, 'frm-commit')]/button"));
+            name.sendKeys("Тест Тест");
+            email.sendKeys("test@");
+            commitButton.click();
+
+            if(email.getAttribute("class").equalsIgnoreCase("error")) {
+                System.out.println("Incorrect email OK");
+            } else System.out.println("Incorrect email ERROR");
+            email.clear();
+            email.sendKeys("test@test.com");
+            commitButton.click();
+
+            //вот тут явно так себе решение
+            try {
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.className("result")));
+                WebElement result = ((ChromeDriver) driver).findElementByClassName("result-heading");
+                    System.out.println("Modal message OK: " + result.getText());
+
+            } catch (Throwable e) {
+                System.out.println("Modal message ERROR");
+            }
+
+            new Actions(driver).click(driver.findElement
+                    (By.xpath(".//a[contains(@data-dismiss, 'result')]"))).perform();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } finally {
