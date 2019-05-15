@@ -13,6 +13,10 @@ import java.util.List;
 
 public class setTest {
 
+    static String customTestStatusMessage(boolean condition, String message) {
+        if(condition) return message + " OK"; else return message + " ERROR";
+    }
+
     public static void main(String[] args) {
 //        System.setProperty("webdriver.gecko.driver", "C:\\drivers\\geckodriver.exe");
         System.setProperty("webdriver.chrome.driver", "C:\\drivers\\chromedriver.exe");
@@ -85,22 +89,20 @@ public class setTest {
 
             wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("h1")));
             WebElement currentPage = ((ChromeDriver) driver).findElement(By.tagName("body"));
-            if(currentPage.findElement(By.tagName("h1")).getText().equalsIgnoreCase("Поиск")){
-                System.out.println("Search page status OK");
-            } else System.out.println("Search page status ERROR");
+            boolean logical = currentPage.findElement(By.tagName("h1")).getText().equalsIgnoreCase("Поиск");
+            System.out.println(customTestStatusMessage(logical, "Search page status"));
+
+            logical = (currentPage
+                        .findElement(By.xpath(".//form[contains(@class, 'search-form')]/input"))
+                        .getAttribute("value")
+                        .equalsIgnoreCase("вакансии"));
+            System.out.println(customTestStatusMessage(logical, "Search field value"));
 
 
-            if(currentPage
-                    .findElement(By.xpath(".//form[contains(@class, 'search-form')]/input"))
-                    .getAttribute("value")
-                    .equalsIgnoreCase("вакансии")){
-                System.out.println("Search field value OK");
-            } else System.out.println("Search field value ERROR");
             String url = driver.getCurrentUrl();
-            if( URLDecoder.decode(url, "UTF-8").equalsIgnoreCase("http://aplana.ru/search?q=Вакансии")) {
-                System.out.println("Page URL Ok");
-            } else System.out.println("Page URL ERROR:" + driver.getCurrentUrl());
-
+            logical = URLDecoder.decode(url, "UTF-8")
+                    .equalsIgnoreCase("http://aplana.ru/search?q=Вакансии");
+            System.out.println(customTestStatusMessage(logical, "Page URL"));
 
             //Переходим на главную страницу
             new Actions(driver).click(currentPage.findElement(By.className("header-brand"))).perform();
@@ -122,10 +124,9 @@ public class setTest {
             email.sendKeys("test@");
             commitButton.click();
 
+            logical = email.getAttribute("class").equalsIgnoreCase("error");
+            System.out.println(customTestStatusMessage(logical, "Incorrect email"));
 
-            if(email.getAttribute("class").equalsIgnoreCase("error")) {
-                System.out.println("Incorrect email OK");
-            } else System.out.println("Incorrect email ERROR");
             email.clear();
             email.sendKeys("test@test.com");
             commitButton.click();
