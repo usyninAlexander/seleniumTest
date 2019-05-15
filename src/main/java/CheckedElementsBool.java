@@ -30,7 +30,7 @@ public class CheckedElementsBool implements CheckedElements {
 
     private ArrayList<CheckedElement> elements;
 
-    public CheckedElementsBool(String[] values) {
+    CheckedElementsBool(String[] values) {
         this.elements = newElementsList(values);
     }
 
@@ -49,7 +49,10 @@ public class CheckedElementsBool implements CheckedElements {
     }
 
     public boolean getStatus() {
-        for(CheckedElement i: this.elements) if(!i.getStatus()) return false;
+        for(CheckedElement i: this.elements) if(!i.getStatus()) {
+            System.out.println(i.getElement());
+            return false;
+        }
         return true;
     }
 }

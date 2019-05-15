@@ -32,23 +32,23 @@ public class setTest {
             WebElement firstResult = ((ChromeDriver) driver).findElementByClassName("header-nav"); //wait.until(presenceOfElementLocated(By.cssSelector("header-menu > a")));
 //            for(int i = 0; i < firstResult.getSize(); )
             List<WebElement> elements = firstResult.findElements(By.xpath("./li/a"));
-            String test[] = new String[] {"Компания", "Услуги", "Наш опыт", "Инфо-центр", "Карьера", "Контакты"};
+            String testHeaderMenuStrings[] = new String[] {"Компания", "Услуги", "Наш опыт", "Инфо-центр", "Карьера", "Контакты"};
             System.out.println(elements.size());
-            for (WebElement i:
-                    elements) {
 
-                System.out.println("Element:" + i.getText()
-                        + " status:" + inArray(i.getText(), test));
+            CheckedElementsBool testHeaderMenu = new CheckedElementsBool(testHeaderMenuStrings);
+            for(WebElement i: elements) {
+                testHeaderMenu.setStatus(i.getText(), true);
             }
+            System.out.println("First test: " + testHeaderMenu.getStatus());
+
             elements = firstResult.findElements(By.xpath("./li[contains(@class,'nav-company')]/ul[contains(@class,'header-dropdown')]/li/a"));
             new Actions(driver).moveToElement(firstResult.findElement(By.className("nav-company"))).perform();
-            for (WebElement i:
-                    elements) {
-
-                System.out.println("Element:" + i.getText() + " attr: " + i.getAttribute("href")
-                        + " status:" + inArray(i.getAttribute("innerHTML"), test));
+            String testCompanyString[] = new String[] {"Аплана сегодня", "Руководство", "Партнёры", "Университет Аплана"};
+            CheckedElementsBool testCompany = new CheckedElementsBool(testCompanyString);
+            for(WebElement i: elements) {
+                testCompany.setStatus(i.getText(), true);
             }
-//            System.out.println();
+            System.out.println("Second test: "+testCompany.getStatus());
         } finally {
             driver.quit();
         }
